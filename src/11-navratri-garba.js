@@ -89,25 +89,95 @@
  *   // => deep clone of stage with id "stage-clone"
  */
 export function insertDancer(stage, newDancer, referenceDancer) {
+  if (!stage || !newDancer) {
+    return false;
+  }
+  try {
+    stage.insertBefore(newDancer, referenceDancer);
+    return true;
+  } catch (error) {
+    return false; // Agar referenceDancer not a child, catch error and return false
+  } 
+
   // Your code here
 }
 
 export function cloneDancer(dancer, deep) {
+  if (!dancer) {  
+    return null;
+  }
+  const clone = dancer.cloneNode(deep);
+  if (clone.id) {
+    clone.id += "-copy";
+  }
+  return clone;
+
   // Your code here
 }
 
 export function replaceDancer(stage, oldDancer, newDancer) {
+  if (!stage || !oldDancer || !newDancer) {
+    return null;
+  }
+  try {
+    return stage.replaceChild(newDancer, oldDancer);
+  } catch (error) {
+    return null; // Agar oldDancer not a child, catch error and return null
+  }
+
   // Your code here
 }
 
 export function removeDancer(stage, dancer) {
+  if (!stage || !dancer) {
+    return null;
+  }
+  try {
+    return stage.removeChild(dancer);
+  } catch (error) {
+    return null; // Agar dancer not a child, catch error and return null
+  }
+
   // Your code here
 }
 
 export function rearrangeStage(stage, order) {
+  if (!stage || !Array.isArray(order)) {
+    return false;
+  }
+  const children = Array.from(stage.children);
+  if (order.length !== children.length) {
+    return false;
+  }
+  const newOrder = [];
+  for (let index of order) {
+    if (index < 0 || index >= children.length) {
+      return false; // Invalid index in order
+    }
+    newOrder.push(children[index]);
+  }
+  // Remove all children
+  while (stage.firstChild) {
+    stage.removeChild(stage.firstChild);
+  }
+  // Append in new order
+  for (let child of newOrder) {
+    stage.appendChild(child);
+  }
+  return true;
+
   // Your code here
 }
 
 export function duplicateFormation(stage) {
+  if (!stage) {
+    return null;
+  }
+  const clone = stage.cloneNode(true);
+  if (clone.id) {
+    clone.id += "-clone";
+  }
+  return clone;
+    
   // Your code here
 }

@@ -70,25 +70,95 @@
  *   // => ["red", "blue"]
  */
 export function addColors(element, ...colors) {
+  if (!element) {
+    return -1;
+  }
+  let count = 0;
+  for (const color of colors) {
+    if (!element.classList.contains(color)) {
+      element.classList.add(color);
+      count++;
+    }
+  }
+  return count; 
+
   // Your code here
 }
 
 export function removeColors(element, ...colors) {
+  if (!element) {
+    return -1;
+  }
+  let count = 0;
+  for (const color of colors) {
+    if (element.classList.contains(color)) {
+      element.classList.remove(color);
+      count++;
+    }
+  }
+  return count;
   // Your code here
 }
 
 export function togglePattern(element, pattern) {
+  if (!element) {
+    return null;
+  }
+  const className = `pattern-${pattern}`;
+  const isNowPresent = element.classList.toggle(className);
+  return isNowPresent;    
+
+//   . togglePattern(element, pattern)
+//  *      - Toggles the class "pattern-{pattern}" on the element
+//  *        (e.g., pattern="floral" toggles class "pattern-floral")
+//  *      - Returns true if the class is NOW present after toggle
+//  *      - Returns false if the class was removed by toggle
+//  *      - Agar element null/undefined, return null
+
+
+
   // Your code here
 }
 
 export function hasDesign(element, designName) {
+  if (!element) {
+    return false;
+  }
+  const className = `design-${designName}`;
+  return element.classList.contains(className); 
+
+
   // Your code here
 }
 
 export function replaceDesign(element, oldDesign, newDesign) {
+  if (!element) {
+    return false;
+  }
+  const oldClass = `design-${oldDesign}`;
+  const newClass = `design-${newDesign}`;
+  const hadOldDesign = element.classList.contains(oldClass);
+  if (hadOldDesign) {
+    element.classList.remove(oldClass);
+  }
+  element.classList.add(newClass);
+  return hadOldDesign;  
+
   // Your code here
 }
 
 export function getActiveColors(element) {
+  if (!element) {
+    return [];
+  }
+  const activeColors = [];
+  element.classList.forEach(className => {
+    if (className.startsWith("color-")) {
+      activeColors.push(className.slice(6)); // "color-".length === 6
+    }
+  });
+  return activeColors;  
+
+
   // Your code here
 }

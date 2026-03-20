@@ -87,29 +87,110 @@
  *   // => { total: 2, waiting: 1, serving: 1, completed: 0 }
  */
 export function findQueueContainer(element) {
+  if (!element) {
+    return null;
+  }
+  return element.closest(".queue-container"); 
   // Your code here
 }
 
 export function getNextInQueue(element) {
+  if (!element) {
+    return null;
+  }
+  return element.nextElementSibling;
+
   // Your code here
 }
 
 export function getPreviousInQueue(element) {
+  if (!element) {
+    return null;
+  }
+  return element.previousElementSibling;  
+
   // Your code here
 }
 
 export function getQueuePosition(element) {
   // Your code here
+  if (!element || !element.parentNode) {
+    return -1;
+  }
+  const siblings = element.parentNode.children;
+  for (let i = 0; i < siblings.length; i++) {
+    if (siblings[i] === element) {
+      return i + 1; // Return 1-based index
+    }
+  }
+  return -1; // Should not reach here if element is in parent's children
+
+
 }
 
+// export function moveToFront(element) {
+//   if (!element || !element.parentNode) {
+//     return false;
+//   }   
+//   const parent = element.parentNode;
+//   if (parent.firstChild === element) {
+    
+//     return false; // Already first child
+//   }
+//   parent.insertBefore(element, parent.firstChild);
+//   return true; // Moved successfully
 export function moveToFront(element) {
+ 
+  if (!element || !element.parentNode) {
+    return false;
+  }   
+
+  const parent = element.parentNode;
+
+  if (parent.firstElementChild === element) {
+    return false; // Already the first element child
+  }
+
+  parent.insertBefore(element, parent.firstChild);
+  
+  return true; 
+
+
   // Your code here
 }
 
 export function removeFromQueue(element) {
+  if (!element || !element.parentNode) {
+    return null;
+  }
+  const parent = element.parentNode;
+  parent.removeChild(element);
+  return element; // Return the removed element
+
   // Your code here
 }
 
 export function getQueueStats(queueContainer) {
   // Your code here
+  if (!queueContainer) {
+    return null;
+  }
+  const stats = {
+    total: 0,
+    waiting: 0,
+    serving: 0,
+    completed: 0
+  };
+  const children = queueContainer.children;
+  stats.total = children.length;
+  for (const child of children) {
+    if (child.classList.contains("waiting")) {
+      stats.waiting++;
+    } else if (child.classList.contains("serving")) {
+      stats.serving++;
+    } else if (child.classList.contains("completed")) {
+      stats.completed++;
+    }
+  }
+  return stats; 
 }

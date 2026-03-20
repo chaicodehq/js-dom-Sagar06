@@ -65,17 +65,90 @@
  *   // => "cutting" (cheapest chai gets "cheapest" class)
  */
 export function updateChaiPrice(document, chaiType, newPrice) {
+  const priceElement = document.getElementById(`price-${chaiType}`);
+  if (
+    !priceElement ||
+    typeof newPrice !== "number" ||
+    newPrice <= 0 ||
+    typeof chaiType !== "string" ||
+    chaiType.trim() === ""
+  ) {
+    return false;
+  }
+  priceElement.textContent = `₹${newPrice}`;
+  return true;
+
   // Your code here
 }
 
 export function getChaiPrice(document, chaiType) {
+  const priceElement = document.getElementById(`price-${chaiType}`);
+  if (!priceElement) {
+    return null;
+  }
+  const priceText = priceElement.textContent;
+  const priceNumber = parseFloat(priceText.replace("₹", ""));
+  return isNaN(priceNumber) ? null : priceNumber;
+
   // Your code here
 }
 
 export function updateStallName(document, newName) {
+  const stallNameElement = document.querySelector(".stall-name");
+  if (
+    !stallNameElement ||
+    typeof newName !== "string" ||
+    newName.trim() === ""
+  ) {
+    return null;
+  }
+  const oldName = stallNameElement.textContent;
+  stallNameElement.textContent = newName;
+  return oldName;
+
+  //    updateStallName(document, newName)
+  //  *      - Finds ".stall-name" element using querySelector
+  //  *      - Saves old textContent, updates to newName
+  //  *      - Returns old name string
+  //  *      - Agar element not found, return null
+  //  *      - Agar newName not string or empty, return null
   // Your code here
 }
 
 export function highlightCheapestChai(document) {
+  const priceElements = document.querySelectorAll(".chai-price");
+  if (priceElements.length === 0) {
+    return null;
+  }
+
+  let cheapestPrice = Infinity;
+  let cheapestChai = null;
+
+  priceElements.forEach((element) => {
+    const priceText = element.textContent;
+    const priceNumber = parseFloat(priceText.replace("₹", ""));
+    if (!isNaN(priceNumber) && priceNumber < cheapestPrice) {
+      cheapestPrice = priceNumber;
+      cheapestChai = element.getAttribute("data-chai");
+    }
+  });
+
+  priceElements.forEach((element) => {
+    if (element.getAttribute("data-chai") === cheapestChai) {
+      element.classList.add("cheapest");
+    } else {
+      element.classList.remove("cheapest");
+    }
+  });
+
+  return cheapestChai;
   // Your code here
+
+  //    highlightCheapestChai(document)
+  //  *      - Finds all ".chai-price" elements using querySelectorAll
+  //  *      - Parses each price (remove ₹, parse to number)
+  //  *      - Adds class "cheapest" to the element with lowest price
+  //  *      - Removes class "cheapest" from all other chai-price elements
+  //  *      - Returns the data-chai attribute value of cheapest chai
+  //  *      - Agar no chai-price elements found, return null
 }
